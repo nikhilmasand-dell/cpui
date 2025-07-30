@@ -1,0 +1,35 @@
+<div class="app-container">
+  <!-- Header -->
+  <header class="navbar navbar-dark bg-dark border-bottom">
+    <div class="container-fluid">
+      <span class="navbar-brand mb-0 h1">
+        <i class="fas fa-chart-line me-2"></i>
+        Structured Notes Control Panel
+      </span>
+      <div class="navbar-text">
+        <small class="text-light">Barclays Trading Platform</small>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <router-outlet></router-outlet>
+  </main>
+
+  <!-- Navigation Tabs at Bottom -->
+  <nav class="nav nav-tabs bg-light border-top bottom-tabs">
+    <a class="nav-link" routerLink="/notes" routerLinkActive="active">
+      <i class="fas fa-sticky-note me-1"></i>
+      Notes
+    </a>
+    <a class="nav-link" routerLink="/bor-errors" routerLinkActive="active">
+      <i class="fas fa-exclamation-triangle me-1"></i>
+      BOR Errors
+    </a>
+    <a class="nav-link" routerLink="/price-history" routerLinkActive="active">
+      <i class="fas fa-history me-1"></i>
+      Price History
+    </a>
+  </nav>
+</div>

@@ -1,0 +1,242 @@
+.notes-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: #f8f9fa;
+}
+
+.status-bar {
+  padding: 0.5rem 1rem;
+  border-bottom: 1px solid #dee2e6;
+  font-size: 0.875rem;
+  
+  &.connected {
+    background-color: #d1e7dd;
+    color: #0f5132;
+  }
+  
+  &.disconnected {
+    background-color: #f8d7da;
+    color: #842029;
+  }
+}
+
+.control-panel {
+  background-color: white;
+  border-bottom: 1px solid #dee2e6;
+  padding: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  align-items: flex-start;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.panel-section {
+  display: flex;
+  flex-direction: column;
+  min-width: 200px;
+  
+  &.filters-section {
+    border-right: 1px solid #dee2e6;
+    padding-right: 1.5rem;
+    
+    .section-content {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    
+    .filter-group {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .filter-label {
+      font-weight: 500;
+      font-size: 0.875rem;
+      color: #495057;
+      margin: 0;
+      white-space: nowrap;
+    }
+    
+    .separator {
+      font-size: 1.2rem;
+      color: #6c757d;
+      font-weight: bold;
+    }
+  }
+  
+  &.actions-section,
+  &.saved-views-section,
+  &.others-section {
+    border-right: 1px solid #dee2e6;
+    padding-right: 1.5rem;
+    
+    &:last-child {
+      border-right: none;
+      padding-right: 0;
+    }
+  }
+}
+
+.section-header {
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: #495057;
+  margin-bottom: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.section-content {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+  
+  .btn {
+    font-size: 0.75rem;
+    padding: 0.375rem 0.75rem;
+    white-space: nowrap;
+    
+    i {
+      font-size: 0.7rem;
+    }
+  }
+  
+  .btn-group {
+    .dropdown-menu {
+      font-size: 0.875rem;
+      
+      .dropdown-item {
+        padding: 0.375rem 1rem;
+        
+        i {
+          width: 1rem;
+          text-align: center;
+        }
+      }
+    }
+  }
+}
+
+.grid-container {
+  flex: 1;
+  overflow: auto;
+  padding: 1rem;
+}
+
+.trading-grid {
+  background-color: white;
+  border-radius: 0.375rem;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  
+  th {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 0.75rem 0.5rem;
+    border: none;
+    background-color: #212529 !important;
+  }
+  
+  td {
+    padding: 0.5rem;
+    font-size: 0.875rem;
+    border-color: #e9ecef;
+    vertical-align: middle;
+  }
+}
+
+.trading-row {
+  cursor: pointer;
+  transition: background-color 0.15s ease-in-out;
+  
+  &:hover {
+    background-color: #f8f9fa;
+  }
+  
+  &:active {
+    background-color: #e9ecef;
+  }
+}
+
+.status-indicator {
+  font-size: 0.75rem;
+  
+  &.status-green i {
+    color: #198754;
+  }
+  
+  &.status-red i {
+    color: #dc3545;
+  }
+  
+  &.status-yellow i {
+    color: #ffc107;
+  }
+}
+
+.price-cell {
+  font-family: 'Courier New', monospace;
+  font-weight: 500;
+  
+  &.mark-price {
+    background-color: #fff3cd;
+  }
+  
+  &.fair-price {
+    background-color: #d1ecf1;
+  }
+}
+
+.context-menu {
+  position: fixed;
+  background-color: white;
+  border: 1px solid #dee2e6;
+  border-radius: 0.375rem;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+  z-index: 1050;
+  min-width: 200px;
+  overflow: hidden;
+}
+
+.context-menu-header {
+  padding: 0.5rem 1rem;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #dee2e6;
+  font-size: 0.875rem;
+  color: #6c757d;
+}
+
+.context-menu-item {
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: background-color 0.15s ease-in-out;
+  
+  &:hover {
+    background-color: #f8f9fa;
+  }
+  
+  &:active {
+    background-color: #e9ecef;
+  }
+  
+  i {
+    width: 1rem;
+    color: #6c757d;
+  }
+}
+
+.context-menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1040;
+}

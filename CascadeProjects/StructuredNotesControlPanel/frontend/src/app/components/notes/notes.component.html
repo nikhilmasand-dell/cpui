@@ -1,0 +1,180 @@
+<div class="notes-container">
+  <!-- Connection Status Bar -->
+  <div class="status-bar" [ngClass]="connectionStatus ? 'connected' : 'disconnected'">
+    <div class="d-flex align-items-center">
+      <i class="fas fa-circle me-2" [ngClass]="connectionStatus ? 'text-success' : 'text-danger'"></i>
+      <span>{{ connectionStatus ? 'Connected to Price Service' : 'Disconnected from Price Service' }}</span>
+      <div class="ms-auto">
+        <small class="text-muted">Last Updated: {{ getCurrentTime() | date:'HH:mm:ss' }}</small>
+      </div>
+    </div>
+  </div>
+
+  <!-- Control Panel -->
+  <div class="control-panel">
+    <!-- Filters Section -->
+    <div class="panel-section filters-section">
+      <div class="section-content">
+        <div class="filter-group">
+          <label class="filter-label">Desk:</label>
+          <select class="form-select form-select-sm" [(ngModel)]="selectedDesk">
+            <option value="">All Desks</option>
+            <option value="US Corporates">US Corporates</option>
+            <option value="European Financials">European Financials</option>
+            <option value="Asian Sovereigns">Asian Sovereigns</option>
+          </select>
+        </div>
+        <div class="separator">|</div>
+        <div class="filter-group">
+          <label class="filter-label">Currency:</label>
+          <select class="form-select form-select-sm" [(ngModel)]="selectedCurrency">
+            <option value="">All Currencies</option>
+            <option value="USD">USD</option>
+            <option value="EUR">EUR</option>
+            <option value="JPY">JPY</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Actions Section -->
+    <div class="panel-section actions-section">
+      <div class="section-header">Actions</div>
+      <div class="section-content">
+        <button class="btn btn-outline-primary btn-sm me-2" (click)="loadData()">
+          <i class="fas fa-download me-1"></i>Load
+        </button>
+        <div class="btn-group me-2">
+          <button class="btn btn-outline-success btn-sm dropdown-toggle" data-bs-toggle="dropdown">
+            <i class="fas fa-file-export me-1"></i>Export
+          </button>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="#" (click)="exportData('excel')"><i class="fas fa-file-excel me-2"></i>Excel</a></li>
+            <li><a class="dropdown-item" href="#" (click)="exportData('csv')"><i class="fas fa-file-csv me-2"></i>CSV</a></li>
+          </ul>
+        </div>
+        <button class="btn btn-outline-info btn-sm me-2" (click)="addPanel()">
+          <i class="fas fa-plus me-1"></i>Add Panel
+        </button>
+        <button class="btn btn-outline-warning btn-sm" (click)="uploadExcel()">
+          <i class="fas fa-upload me-1"></i>Upload Excel
+        </button>
+      </div>
+    </div>
+
+    <!-- Saved Views Section -->
+    <div class="panel-section saved-views-section">
+      <div class="section-header">Saved Views</div>
+      <div class="section-content">
+        <button class="btn btn-outline-secondary btn-sm me-2" (click)="openView()">
+          <i class="fas fa-folder-open me-1"></i>Open
+        </button>
+        <button class="btn btn-outline-info btn-sm me-2" (click)="setDefaultView()">
+          <i class="fas fa-star me-1"></i>Default View
+        </button>
+        <button class="btn btn-outline-primary btn-sm me-2" (click)="saveView()">
+          <i class="fas fa-save me-1"></i>Save
+        </button>
+        <button class="btn btn-outline-primary btn-sm" (click)="saveAsView()">
+          <i class="fas fa-save me-1"></i>Save As
+        </button>
+      </div>
+    </div>
+
+    <!-- Others Section -->
+    <div class="panel-section others-section">
+      <div class="section-header">Others</div>
+      <div class="section-content">
+        <button class="btn btn-outline-danger btn-sm me-2" (click)="loadErrors()">
+          <i class="fas fa-exclamation-triangle me-1"></i>Load Errors
+        </button>
+        <button class="btn btn-outline-success btn-sm me-2" (click)="addManualNote()">
+          <i class="fas fa-sticky-note me-1"></i>Add Manual Note
+        </button>
+        <button class="btn btn-outline-info btn-sm me-2" (click)="noteLifecycle()">
+          <i class="fas fa-recycle me-1"></i>Note Lifecycle
+        </button>
+        <button class="btn btn-outline-warning btn-sm me-2" (click)="manageSubscriptions()">
+          <i class="fas fa-bell me-1"></i>Subscriptions
+        </button>
+        <button class="btn btn-outline-dark btn-sm" (click)="bookAdmin()">
+          <i class="fas fa-cog me-1"></i>Book Admin
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Trading Notes Grid -->
+  <div class="grid-container">
+    <div class="table-responsive">
+      <table class="table table-sm table-hover trading-grid">
+        <thead class="table-dark sticky-top">
+          <tr>
+            <th>ISIN</th>
+            <th>Group</th>
+            <th>Currency</th>
+            <th>Status</th>
+            <th>Bid Price</th>
+            <th>Ask Price</th>
+            <th>Bid Spread</th>
+            <th>Ask Spread</th>
+            <th>Position</th>
+            <th>Circle</th>
+            <th>Mark Price</th>
+            <th>Fair Price</th>
+            <th>Maturity</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let note of tradingNotes; trackBy: trackByIsin" 
+              (contextmenu)="onRightClick($event, note)"
+              class="trading-row">
+            <td class="font-monospace fw-bold">{{ note.isin }}</td>
+            <td>{{ note.group }}</td>
+            <td class="text-center">
+              <span class="badge bg-secondary">{{ note.currency }}</span>
+            </td>
+            <td class="text-center">
+              <span class="status-indicator" [ngClass]="getStatusClass(note.status)">
+                <i class="fas fa-circle"></i>
+              </span>
+            </td>
+            <td class="text-end price-cell">{{ formatCurrency(note.bidPrice) }}</td>
+            <td class="text-end price-cell">{{ formatCurrency(note.askPrice) }}</td>
+            <td class="text-end">{{ formatSpread(note.bidSpread) }}</td>
+            <td class="text-end">{{ formatSpread(note.askSpread) }}</td>
+            <td class="text-end" [ngClass]="note.position >= 0 ? 'text-success' : 'text-danger'">
+              {{ formatPosition(note.position) }}
+            </td>
+            <td class="text-end">{{ formatPosition(note.circle) }}</td>
+            <td class="text-end price-cell mark-price">{{ formatCurrency(note.markPrice) }}</td>
+            <td class="text-end price-cell fair-price">{{ formatCurrency(note.fairPrice) }}</td>
+            <td class="text-center">{{ note.maturity }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Context Menu -->
+  <div *ngIf="contextMenuVisible" 
+       class="context-menu"
+       [style.left.px]="contextMenuX"
+       [style.top.px]="contextMenuY"
+       #contextMenu>
+    <div class="context-menu-header">
+      <strong>{{ selectedNote?.isin }}</strong>
+    </div>
+    <div class="context-menu-item" 
+         *ngFor="let action of contextMenuActions"
+         (click)="onContextMenuAction(action.action)">
+      <i [class]="action.icon + ' me-2'"></i>
+      {{ action.label }}
+    </div>
+  </div>
+
+  <!-- Overlay to capture clicks outside context menu -->
+  <div *ngIf="contextMenuVisible" 
+       class="context-menu-overlay" 
+       (click)="hideContextMenu()"></div>
+</div>

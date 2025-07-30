@@ -1,0 +1,65 @@
+<div class="bor-errors-container">
+  <div class="header-section">
+    <h4 class="mb-3">
+      <i class="fas fa-exclamation-triangle text-warning me-2"></i>
+      BOR Errors
+    </h4>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <div class="error-summary">
+        <span class="badge bg-danger me-2">{{ getErrorCountByStatus('Open') }} Open</span>
+        <span class="badge bg-warning me-2">{{ getErrorCountByStatus('In Progress') }} In Progress</span>
+        <span class="badge bg-success">{{ getErrorCountByStatus('Resolved') }} Resolved</span>
+      </div>
+      <button class="btn btn-outline-primary btn-sm">
+        <i class="fas fa-sync-alt me-1"></i>
+        Refresh
+      </button>
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table table-hover">
+      <thead class="table-dark">
+        <tr>
+          <th>Error ID</th>
+          <th>Timestamp</th>
+          <th>ISIN</th>
+          <th>Error Type</th>
+          <th>Severity</th>
+          <th>Description</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let error of borErrors">
+          <td class="font-monospace">{{ error.id }}</td>
+          <td>{{ error.timestamp | date:'dd/MM/yyyy HH:mm' }}</td>
+          <td class="font-monospace fw-bold">{{ error.isin }}</td>
+          <td>{{ error.errorType }}</td>
+          <td>
+            <span [ngClass]="getSeverityClass(error.severity)">
+              {{ error.severity }}
+            </span>
+          </td>
+          <td>{{ error.description }}</td>
+          <td>
+            <span [ngClass]="getStatusClass(error.status)">
+              {{ error.status }}
+            </span>
+          </td>
+          <td>
+            <button *ngIf="error.status !== 'Resolved'" 
+                    class="btn btn-sm btn-outline-success me-1"
+                    (click)="resolveError(error.id)">
+              <i class="fas fa-check"></i>
+            </button>
+            <button class="btn btn-sm btn-outline-primary">
+              <i class="fas fa-eye"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
